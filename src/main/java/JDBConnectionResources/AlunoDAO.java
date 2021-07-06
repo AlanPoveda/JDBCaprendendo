@@ -169,7 +169,7 @@ public class AlunoDAO {
             System.out.println("Update feito com sucesso "+rowsAffected+" linha");
 
         }catch(SQLException e){
-            System.out.println("Deu erro para deletar");
+            System.out.println("Deu erro para fazer Update");
             e.printStackTrace();
         }
     }
