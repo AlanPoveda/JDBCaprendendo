@@ -92,11 +92,87 @@ public class AlunoDAO {
     };
 
 
-    //Fazer um UPDATE, com uma pessoa espefíca
-    
+    //Fazer um INSERT, novo no banco
+
+    public void create(Aluno aluno){
+
+        //Conexão
+        try(Connection conn = JDBConnectionResources.getConnection()){
+
+            //O comando sql para inserir um novo aluno no banco
+            String sql = "INSERT INTO aluno(nome, idade, estado) VALUES(?,?,?)";
+
+            //Preparar o state para inserir os parâmentros, ele vai procurar os ? da string, e substituir
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, aluno.getNome());
+            stmt.setInt(2,aluno.getIdade());
+            stmt.setString(3,aluno.getEstado());
+
+            //Executar a insersão, tem que ser o execute Update
+            int rowAffected = stmt.executeUpdate();
+
+            System.out.println("Inserção bem sucedida! Foi adicionado "+ rowAffected + " linha");
+
+
+        }catch(SQLException e){
+            System.out.println("Falhou a insersão");
+            e.printStackTrace();
+        }
+
+    }
+
 
     //Fazer um DELETE, de uma pessoa específica
+    public void delete(int id){
+        //Fazer conexão
+        //Comando sql de delete
+        String sql = "DELETE FROM aluno WHERE id = ?";
 
+        try(Connection conn = JDBConnectionResources.getConnection()){
+
+            //Preparando para receber os parâmentros
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,id);
+
+            //Exeecutar
+
+            int rowAffected = stmt.executeUpdate();
+
+            System.out.println("Foi removido com sucesso! Foi deletado "+rowAffected+" linha");
+
+        }catch(SQLException e){
+            System.out.println("Deu erro para deletar");
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    //Fazer atualização
+    public void atualizacao(Aluno aluno){
+        String sql = "UPDATE aluno SET nome = ?, idade = ?, estado = ? WHERE id = ?";
+
+        try(Connection conn = JDBConnectionResources.getConnection()){
+            //Preparar state para receber os parâmetros, usando o parâmetro aluno
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,aluno.getNome());
+            stmt.setInt(2,aluno.getIdade());
+            stmt.setString(3,aluno.getEstado());
+            stmt.setInt(4,aluno.getId());
+
+            //Executar o sql
+            int rowsAffected = stmt.executeUpdate();
+
+
+            //Mostrar aonde ocorreu o resultado
+            System.out.println("Update feito com sucesso "+rowsAffected+" linha");
+
+        }catch(SQLException e){
+            System.out.println("Deu erro para deletar");
+            e.printStackTrace();
+        }
+    }
 
 
 }
